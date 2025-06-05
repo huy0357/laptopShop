@@ -1,0 +1,15 @@
+/* Căn giữa form theo chiều ngang và dọc */
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white; /* Màu nền nhẹ */
+}
+
+form {
+    width: 500px; /* Tăng độ rộng của form từ 350px lên 500px */
+    padding: 30px; /* Tăng khoảng cách bên trong form để form cao hơn */
+    background: white;
+
+}
