@@ -23,6 +23,9 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+      - name: Enable PowerShell script execution
+        run: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+        shell: pwsh
 
       - name: Run Unit Tests
         run: mvn test
