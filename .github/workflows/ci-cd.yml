@@ -50,8 +50,9 @@ jobs:
 
       - name: Deploy WAR to Tomcat
         run: |
-          copy target\demo.war C:\Tomcat\apache-tomcat-10.1.25\webapps\
-          C:\Tomcat\apache-tomcat-10.1.25\bin\startup.bat
+          if not exist C:\Tomcat\apache-tomcat-10.1.42-windows-x64\apache-tomcat-10.1.42\webapps\ mkdir C:\Tomcat\apache-tomcat-10.1.42-windows-x64\apache-tomcat-10.1.42\webapps\
+          copy target\demo.war C:\Tomcat\apache-tomcat-10.1.42-windows-x64\apache-tomcat-10.1.42\webapps\
+          C:\Tomcat\apache-tomcat-10.1.42-windows-x64\apache-tomcat-10.1.42\bin\startup.bat
 
       - name: Wait for Tomcat to start
         run: timeout /t 20
