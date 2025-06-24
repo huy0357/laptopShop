@@ -25,7 +25,9 @@ jobs:
           cache: maven
 
       - name: Build WAR with Maven
-        run: mvn clean package -DskipTests  # Sinh file .war, bỏ qua test nếu cần
+        run: |
+          mvn clean package -DskipTests
+          ls -la target/  # Kiểm tra file trong target
 
       - name: Upload WAR artifact
         uses: actions/upload-artifact@v4
@@ -48,22 +50,18 @@ jobs:
 
       - name: Set up Tomcat
         run: |
-          # Tải Tomcat (giả sử dùng phiên bản 10, điều chỉnh nếu cần)
           wget https://downloads.apache.org/tomcat/tomcat-10/v10.1.24/bin/apache-tomcat-10.1.24.tar.gz
           tar -xzf apache-tomcat-10.1.24.tar.gz
           mv apache-tomcat-10.1.24 tomcat
 
       - name: Deploy WAR to Tomcat
         run: |
-          cp target/*.war tomcat/webapps/  # Copy file .war vào thư mục webapps
-          chmod +x tomcat/bin/*.sh  # Cấp quyền thực thi cho script
-          tomcat/bin/startup.sh     # Khởi động Tomcat
+          cp target/*.war tomcat/webapps/
+          chmod +x tomcat/bin/*.sh
+          tomcat/bin/startup.sh
 
       - name: Wait for Tomcat to start
-        run: sleep 20  # Đợi Tomcat khởi động
+        run: sleep 20
 
       - name: Check Deployment
-        run: curl http://localhost:8080/your-app/  # Thay your-app bằng tên ứng dụng từ .war
-
-    # Lưu ý: Vì đây là môi trường runner, bạn cần tự host runner nếu muốn deploy lên Tomcat cục bộ.
-    # Dùng GitHub token để xác thực nếu cần (ví dụ: với self-hosted runner).
+        run: curl http://localhost:8080/your-app/
