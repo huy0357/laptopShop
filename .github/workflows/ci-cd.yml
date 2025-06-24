@@ -48,6 +48,11 @@ jobs:
           name: war-file
           path: target
 
+      - name: Debug Paths
+        run: |
+          dir C:\Tomcat\apache-tomcat-10.1.42-windows-x64\apache-tomcat-10.1.42
+          dir target\demo.war
+
       - name: Deploy WAR to Tomcat
         run: |
           if not exist C:\Tomcat\apache-tomcat-10.1.42-windows-x64\apache-tomcat-10.1.42\webapps\ mkdir C:\Tomcat\apache-tomcat-10.1.42-windows-x64\apache-tomcat-10.1.42\webapps\
