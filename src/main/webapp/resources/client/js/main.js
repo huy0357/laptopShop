@@ -1,4 +1,4 @@
-(function ($) {
+    (function ($) {
     "use strict";
 
     // Spinner
@@ -131,21 +131,87 @@
 
 
 
-    // Product Quantity
-    $('.quantity button').on('click', function () {
-        var button = $(this);
-        var oldValue = button.parent().parent().find('input').val();
-        if (button.hasClass('btn-plus')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
+    // // Product Quantity
+    // $('.quantity button').on('click', function () {
+    //     var button = $(this);
+    //     var oldValue = button.parent().parent().find('input').val();
+    //     if (button.hasClass('btn-plus')) {
+    //         var newVal = parseFloat(oldValue) + 1;
+    //     } else {
+    //         if (oldValue > 0) {
+    //             var newVal = parseFloat(oldValue) - 1;
+    //         } else {
+    //             newVal = 0;
+    //         }
+    //     }
+    //     button.parent().parent().find('input').val(newVal);
+    // });
+        $('.quantity button').on('click', function () {
+            let change =0;
+            var button = $(this);
+            var oldValue = button.parent().parent().find('input').val();
+            if (button.hasClass('btn-plus')) {
+                var newVal = parseFloat(oldValue) + 1;
+                change =1;
             } else {
-                newVal = 0;
+                if (oldValue > 1) {
+                    var newVal = parseFloat(oldValue) - 1;
+                    change = -1;
+                } else {
+                    newVal = 1;
+                }
             }
+            const input = button.parent().parent().find('input');
+            input.val(newVal);
+
+            //get price
+            const price = input.attr("data-cart-detail-price");
+            const id = input.attr("data-cart-detail-id");
+
+            const priceElement = $(`p[data-cart-detail-id='${id}']`);
+
+            if (priceElement){
+                const newPrice = +price * newVal;
+                priceElement.text(formatCurency(newPrice.toFixed(2))+" đ")
+            }
+
+
+            const  totalPriceElement = $(`p[data-cart-total-price]`);
+            if (totalPriceElement && totalPriceElement.length){
+                const curentTotal = totalPriceElement.first().attr("data-cart-total-price");
+                let newTotal = +curentTotal;
+                if(change === 0){
+                    newTotal = +curentTotal;
+                }else {
+                    newTotal = change *(+price)+ (+curentTotal);
+                }
+
+                //reset change
+                change = 0;
+
+                //update
+                totalPriceElement?.each(function (index,element){
+                    //update text
+                    $(totalPriceElement[index]).text(formatCurency(newTotal.toFixed(2))+" đ");
+
+                    //update data-attribute
+                    $(totalPriceElement[index]).attr("data-cart-total-price",newTotal);
+                })
+            }
+
+        });
+
+        function formatCurency(value){
+            const formatter = new Intl.NumberFormat('vi-VN',{
+                style:'decimal',
+                minimumFractionDigits:0,
+            });
+
+            let formatted = formatter.format(value);
+            formatted = formatted.replace(/\./g,',');
+            return formatted;
         }
-        button.parent().parent().find('input').val(newVal);
-    });
+
 
 })(jQuery);
 

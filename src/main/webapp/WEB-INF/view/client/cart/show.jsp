@@ -76,6 +76,7 @@
 
                 <c:forEach items="${cartDetails}" var="cartDetails">
                     <tr >
+
                         <th scope="row">
                             <div class="d-flex align-items-center">
                                 <img src="/images/${cartDetails.product.image}"
@@ -83,6 +84,7 @@
                                      style="width: 80px; height: 80px;" alt="">
                             </div>
                         </th>
+
                         <td>
                             <p class="mb-0 mt-4">
                                 <a href="/product/${cartDetails.product.id}" target="_blank">
@@ -90,11 +92,13 @@
                                 </a>
                             </p>
                         </td>
+
                         <td>
                             <p class="mb-0 mt-4">
                                 <fmt:formatNumber value="${cartDetails.product.price}" type="number" /> đ
                             </p>
                         </td>
+
                         <td>
                             <div class="input-group quantity mt-4" style="width: 100px;">
                                 <div class="input-group-btn">
@@ -102,8 +106,11 @@
                                         <i class="fa fa-minus"></i>
                                     </button>
                                 </div>
-                                <input type="text" class="form-control form-control-sm text-center border-0"
-                                       value="${cartDetails.quantity}">
+                                <input type="text"
+                                       class="form-control form-control-sm text-center border-0"
+                                       value="${cartDetails.quantity}"
+                                       data-cart-detail-id="${cartDetails.id}"
+                                       data-cart-detail-price="${cartDetails.price }">
                                 <div class="input-group-btn">
                                     <button class="btn btn-sm btn-plus rounded-circle bg-light border">
                                         <i class="fa fa-plus"></i>
@@ -111,10 +118,10 @@
                                 </div>
                             </div>
                         </td>
+
                         <td>
-                            <p class="mb-0 mt-4">
-                                <fmt:formatNumber type="number"
-                                value="${cartDetails.price *  cartDetails.quantity}"/> đ
+                            <p class="mb-0 mt-4 item-total-price" data-cart-detail-id="${cartDetails.id}">
+                                <fmt:formatNumber type="number" value="${cartDetails.price * cartDetails.quantity}"/> đ
                             </p>
                         </td>
                         <td>
@@ -139,7 +146,7 @@
                         <h1 class="display-6 mb-4">Thông tin <span class="fw-normal">Đơn hàng</span></h1>
                         <div class="d-flex justify-content-between mb-4">
                             <h5 class="mb-0 me-4">Tạm tính:</h5>
-                            <p class="mb-0">
+                            <p class="mb-0" data-cart-total-price="${totalPrice}">
                                 <fmt:formatNumber type="number" value="${totalPrice}"/> đ
                             </p>
                         </div>
@@ -153,11 +160,12 @@
                     </div>
                     <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                         <h5 class="mb-0 ps-4 me-4">Tổng số tiền</h5>
-                        <p class="mb-0 pe-4">
+                        <p class="mb-0 pe-4" data-cart-total-price="${totalPrice}">
                             <fmt:formatNumber type="number" value="${totalPrice}"/> đ
                         </p>
                     </div>
-                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
+                    <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
+                            type="button">Proceed Checkout</button>
                 </div>
             </div>
         </div>
