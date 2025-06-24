@@ -12,7 +12,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,12 +25,12 @@ jobs:
           cache: maven
 
       - name: Run Unit Tests
-        run: mvn test  # Chạy tất cả unit test trong dự án
+        run: mvn test
 
       - name: Build WAR with Maven
         run: |
           mvn clean package -DskipTests
-          ls -la target/  # Kiểm tra file trong target
+          dir target/
 
       - name: Upload WAR artifact
         uses: actions/upload-artifact@v4
@@ -39,7 +39,7 @@ jobs:
           path: target/demo.war
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-and-test
     steps:
       - name: Download WAR artifact
@@ -48,23 +48,15 @@ jobs:
           name: war-file
           path: target
 
-      - name: Set up Tomcat
-        run: |
-          wget https://downloads.apache.org/tomcat/tomcat-10/v10.1.23/bin/apache-tomcat-10.1.23.tar.gz
-          tar -xzf apache-tomcat-10.1.23.tar.gz
-          mv apache-tomcat-10.1.23 tomcat
-
       - name: Deploy WAR to Tomcat
         run: |
-          cp target/demo.war tomcat/webapps/
-          chmod +x tomcat/bin/*.sh
-          tomcat/bin/startup.sh
+          copy target\demo.war C:\Tomcat\apache-tomcat-10.1.25\webapps\
+          C:\Tomcat\apache-tomcat-10.1.25\bin\startup.bat
 
       - name: Wait for Tomcat to start
-        run: sleep 20
+        run: timeout /t 20
 
-      - name: Check Deployment (Local Simulation)
+      - name: Check Deployment
         run: |
-          echo "Deployment simulated. Check logs for Tomcat startup."
-          cat tomcat/logs/catalina.out || echo "No logs available"
+          curl http://localhost:8080/demo/
         continue-on-error: true
